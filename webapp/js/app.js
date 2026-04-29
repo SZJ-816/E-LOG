@@ -101,6 +101,7 @@ function switchPage(page) {
     
     if (page === 'datasource') loadDataSources();
     if (page === 'hdfs') loadHdfsFiles('/');
+    if (page === 'tasks') loadTasks();
 }
 
 // 加载首页统计
@@ -214,7 +215,84 @@ document.getElementById('fileInput').addEventListener('change', async (e) => {
     }
 });
 
-// 任务调度（待扩展）
+// 任务调度
+let tasks = [];
+
+async function loadTasks() {
+    const res = await fetch('http://192.168.146.128:8080/api/task/list', {
+        headers: { 'Authorization': 'Bearer ' + authToken }
+    });
+    const result = await res.json();
+    tasks = result.data || [];
+    const list = document.getElementById('taskList');
+    if (tasks.length > 0) {
+        list.innerHTML = tasks.map(t => `
+            <div class="task-item">
+                <div>
+                    <strong>${t.name}</strong>
+                    <p style="color:#999;font-size:12px;margin-top:4px;">
+                        数据源: ${t.sourceId || '-'} → ${t.targetPath || '-'} | 
+                        Cron: ${t.cronExpr || '-'}
+                    </p>
+                    <p style="color:#666;font-size:12px;">
+                        上次运行: ${t.lastRunTime ? new Date(t.lastRunTime).toLocaleString() : '从未'} | 
+                        状态: <span style="color:${t.lastRunStatus === 'SUCCESS' ? 'green' : 'red'}">${t.lastRunStatus || '-'}</span>
+                    </p>
+                </div>
+                <div class="actions">
+                    <button class="btn-secondary" onclick="runTask(${t.id})">执行</button>
+                    <button class="btn-secondary" onclick="toggleTask(${t.id})">${t.status === 1 ? '停用' : '启用'}</button>
+                    <button class="btn-danger" onclick="delTask(${t.id})">删除</button>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        list.innerHTML = '<p class="empty-tip">暂无定时任务</p>';
+    }
+}
+
 function showAddTask() {
-    alert('任务调度功能开发中...');
+    const name = prompt('任务名称:');
+    if (!name) return;
+    const sourceId = prompt('数据源ID (输入数字):');
+    const targetPath = prompt('目标HDFS路径:');
+    const cronExpr = prompt('Cron表达式 (如: 0 0 * * * ?):');
+    
+    fetch('http://192.168.146.128:8080/api/task/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + authToken },
+        body: JSON.stringify({ name, sourceId: parseInt(sourceId), targetPath, cronExpr })
+    }).then(r => r.json()).then(res => {
+        if (res.success) loadTasks();
+        else alert(res.message);
+    });
+}
+
+async function runTask(id) {
+    const res = await fetch(`http://192.168.146.128:8080/api/task/${id}/execute`, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + authToken }
+    });
+    const result = await res.json();
+    alert(result.message);
+    loadTasks();
+}
+
+async function toggleTask(id) {
+    const res = await fetch(`http://192.168.146.128:8080/api/task/${id}/toggle`, {
+        method: 'PUT',
+        headers: { 'Authorization': 'Bearer ' + authToken }
+    });
+    const result = await res.json();
+    if (result.success) loadTasks();
+}
+
+async function delTask(id) {
+    if (!confirm('确定删除?')) return;
+    const res = await fetch(`http://192.168.146.128:8080/api/task/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + authToken }
+    });
+    const result = await res.json();
+    if (result.success) loadTasks();
 }

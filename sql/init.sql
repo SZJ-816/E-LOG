@@ -43,6 +43,21 @@ CREATE TABLE IF NOT EXISTS t_sync_task (
     update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='同步任务表';
 
+-- 同步任务表
+CREATE TABLE IF NOT EXISTS t_sync_task (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL COMMENT '任务名称',
+    source_id BIGINT COMMENT '源数据源ID',
+    target_path VARCHAR(255) COMMENT '目标HDFS路径',
+    cron_expr VARCHAR(50) COMMENT 'cron表达式',
+    status TINYINT DEFAULT 1 COMMENT '状态: 0-停用 1-启用',
+    last_run_time DATETIME COMMENT '上次执行时间',
+    last_run_status VARCHAR(20) COMMENT '上次执行状态',
+    create_user_id BIGINT,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='同步任务表';
+
 -- 操作日志表
 CREATE TABLE IF NOT EXISTS t_operation_log (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
