@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-LOG 企业数据管理平台</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 登录/注册表单 -->
+        <div class="auth-container" id="authSection">
+            <div class="auth-box">
+                <h1>E-LOG</h1>
+                <p class="subtitle">企业数据管理平台</p>
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">登录</button>
+                    <button class="tab-btn" onclick="switchTab('register')">注册</button>
+                </div>
+                
+                <!-- 登录表单 -->
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <input type="text" id="loginUsername" placeholder="用户名" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="loginPassword" placeholder="密码" required>
+                    </div>
+                    <button type="submit" class="btn-primary">登录</button>
+                </form>
+                
+                <!-- 注册表单 -->
+                <form id="registerForm" class="auth-form" style="display:none;">
+                    <div class="form-group">
+                        <input type="text" id="regUsername" placeholder="用户名" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="regEmail" placeholder="邮箱" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="regPassword" placeholder="密码" required>
+                    </div>
+                    <button type="submit" class="btn-primary">注册</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 主界面 -->
+        <div class="main-container" id="mainSection" style="display:none;">
+            <div class="sidebar">
+                <div class="logo">
+                    <h2>E-LOG</h2>
+                </div>
+                <nav>
+                    <a href="#" class="nav-item active" data-page="home">
+                        <span class="icon">🏠</span> 首页概览
+                    </a>
+                    <a href="#" class="nav-item" data-page="datasource">
+                        <span class="icon">📊</span> 数据源管理
+                    </a>
+                    <a href="#" class="nav-item" data-page="hdfs">
+                        <span class="icon">📁</span> HDFS文件管理
+                    </a>
+                    <a href="#" class="nav-item" data-page="tasks">
+                        <span class="icon">📅</span> 任务调度
+                    </a>
+                    <a href="#" class="nav-item" onclick="logout()">
+                        <span class="icon">🚪</span> 退出登录
+                    </a>
+                </nav>
+            </div>
+            <div class="content">
+                <!-- 首页 -->
+                <div class="page" id="page-home">
+                    <h2>首页概览</h2>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <h3 id="datasourceCount">0</h3>
+                            <p>数据源</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="hdfsFileCount">0</h3>
+                            <p>HDFS文件</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="taskCount">0</h3>
+                            <p>定时任务</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据源管理 -->
+                <div class="page" id="page-datasource" style="display:none;">
+                    <div class="page-header">
+                        <h2>数据源管理</h2>
+                        <button class="btn-primary" onclick="showAddDataSource()">+ 添加数据源</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datasourceTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- HDFS文件管理 -->
+                <div class="page" id="page-hdfs" style="display:none;">
+                    <div class="page-header">
+                        <h2>HDFS文件管理</h2>
+                        <div class="path-nav">
+                            <span>当前路径: </span>
+                            <span id="currentPath">/</span>
+                        </div>
+                    </div>
+                    <div class="hdfs-actions">
+                        <input type="file" id="fileInput" style="display:none;">
+                        <button class="btn-secondary" onclick="document.getElementById('fileInput').click()">上传文件</button>
+                        <button class="btn-secondary" onclick="showMkdirDialog()">新建目录</button>
+                        <button class="btn-secondary" onclick="refreshHdfs()">刷新</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>大小</th>
+                                <th>类型</th>
+                                <th>修改时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hdfsTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- 任务调度 -->
+                <div class="page" id="page-tasks" style="display:none;">
+                    <div class="page-header">
+                        <h2>任务调度</h2>
+                        <button class="btn-primary" onclick="showAddTask()">+ 添加任务</button>
+                    </div>
+                    <div class="task-list" id="taskList">
+                        <p class="empty-tip">暂无定时任务</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
