@@ -51,6 +51,8 @@ function setupForms() {
         if (result.success && result.token) {
             localStorage.setItem('token', result.token);
             localStorage.setItem('username', username);
+            localStorage.setItem('email', user?.email || '');
+            localStorage.setItem('loginTime', new Date().toLocaleString());
             authToken = result.token;
             showMain();
         } else {
