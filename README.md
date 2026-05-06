@@ -31,14 +31,7 @@ E-LOG-完整项目/
 ├── vite.config.js                # Vite 构建配置
 ├── index.html                    # HTML 入口
 ├── README.md                     # 项目说明
-├── 部署配置文档.md                # 部署文档
-└── 实验报告与PPT/                 # 实验报告（6份）
-    ├── PPT大纲_企业级日志实时分析系统.md
-    ├── 实验报告1_日志采集与消息队列.md
-    ├── 实验报告2_Flink实时数据处理.md
-    ├── 实验报告3_Spark批处理与数据持久化.md
-    ├── 实验报告4_SpringBoot后端服务开发.md
-    └── 实验报告5_Vue3前端可视化开发.md
+└── 部署配置文档.md                # 部署文档
 ```
 
 ---
@@ -165,21 +158,6 @@ npm run dev
 - 端点: https://api.github.com/events
 - 采集频率: 每 5 秒
 - 事件类型: PushEvent, PullRequestEvent, IssuesEvent, WatchEvent, ForkEvent 等
-
----
-
-## 📝 实验报告
-
-项目包含 6 份实验报告，覆盖完整开发流程：
-
-| 报告 | 内容 |
-|------|------|
-| 实验报告1 | 日志采集与消息队列 (Flume + Kafka) |
-| 实验报告2 | Flink 实时数据处理 |
-| 实验报告3 | Spark 批处理与数据持久化 |
-| 实验报告4 | Spring Boot 后端服务开发 |
-| 实验报告5 | Vue3 前端可视化开发 |
-| PPT 大纲 | 答辩 PPT 结构参考 |
 
 ---
 
