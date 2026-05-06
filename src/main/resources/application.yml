@@ -1,28 +1,28 @@
 server:
-  port: 8080
+  port: 8089
 
 spring:
-  application:
-    name: e-log-platform
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.146.128:3306/elog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/log_analysis?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
-# MyBatis Plus配置
-mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.elog.entity
-  configuration:
-    map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-# Hadoop配置
-hadoop:
-  namenode: hdfs://192.168.146.128:9000
-
-# JWT配置
-jwt:
-  secret: elog-platform-secret-key-2024
-  expiration: 86400000
+bigdata:
+  kafka:
+    bootstrap-servers: 192.168.146.128:9092
+    topic: log-topic
+    group-id: log-analysis-group
+  flink:
+    enabled: true
+    rest-address: 192.168.146.128
+    rest-port: 8081
+  hdfs:
+    uri: hdfs://192.168.146.128:9000
+    user: root
