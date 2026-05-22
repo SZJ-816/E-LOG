@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 
-public class SparkErrorLogFliterDao implements Function<LogEntry, Boolean> , Serializable {
+public class SparkErrorLogFilterDao implements Function<LogEntry, Boolean> , Serializable {
     @Override
     public Boolean call(LogEntry logEntry) throws Exception {
         return  logEntry.getStatusCode() >= 400;

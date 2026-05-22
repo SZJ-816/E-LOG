@@ -43,13 +43,12 @@ api.interceptors.response.use(
 
 export const logApi = {
   getOverview: () => requestWithRetry(() => api.get('/overview')),
-  getPvUvStats: (date) => requestWithRetry(() => api.get('/pvuv', { params: { date } })),
-  getTopApis: (date, limit) => requestWithRetry(() => api.get('/topN', { params: { date, limit } })),
+  getPvUvStats: () => requestWithRetry(() => api.get('/pvuv')),
+  getTopApis: (limit) => requestWithRetry(() => api.get('/topN', { params: { limit } })),
   getErrors: (limit) => requestWithRetry(() => api.get('/errors', { params: { limit } })),
   getSystemHealth: () => requestWithRetry(() => api.get('/health')),
   getServerMetrics: () => requestWithRetry(() => api.get('/servers')),
   getLogLevelStats: () => requestWithRetry(() => api.get('/log-levels')),
-  getResponseTime: () => requestWithRetry(() => api.get('/responseTime')),
   getHdfsPv: () => requestWithRetry(() => api.get('/hdfs/pv')),
   getHdfsUv: () => requestWithRetry(() => api.get('/hdfs/uv')),
   getHdfsErrors: () => requestWithRetry(() => api.get('/hdfs/errors')),

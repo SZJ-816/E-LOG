@@ -255,7 +255,7 @@ const servers = ref([
 ])
 
 let flowChart, statusChart, radarChart, responseChart, compareChart
-let currentTime = ref('')
+const currentTime = ref('')
 let timerInterval
 
 function formatNumber(n) {
@@ -509,7 +509,7 @@ async function fetchData() {
   try {
     const [overviewRes, topApisRes, errorsRes, pvuvRes, logLevelsRes, healthRes, serversRes] = await Promise.allSettled([
       logApi.getOverview(),
-      logApi.getTopApis(null, 5),
+      logApi.getTopApis(5),
       logApi.getErrors(5),
       logApi.getPvUvStats(),
       logApi.getLogLevelStats(),

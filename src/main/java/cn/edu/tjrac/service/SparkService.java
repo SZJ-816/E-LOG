@@ -60,7 +60,7 @@ public class SparkService {
             return;
         }
         JavaDStream<LogEntry> logStream = stream
-                .filter(new SparkEmptyFilyerDao())
+                .filter(new SparkEmptyFilterDao())
                 .map(new SparkJsonDao());
 
         logStream.foreachRDD(new SparkPvDao((pv, logLine, day) -> {
@@ -80,7 +80,7 @@ public class SparkService {
             }
         }));
 
-        logStream.filter(new SparkErrorLogFliterDao()).map(new SparkLogToStringDao()).foreachRDD(new SparkErrorSaveDao((hdfsPath, content) -> {
+        logStream.filter(new SparkErrorLogFilterDao()).map(new SparkLogToStringDao()).foreachRDD(new SparkErrorSaveDao((hdfsPath, content) -> {
             try {
                 saveHDFSUtil.save(hdfsPath, content);
             } catch (Exception e) {
